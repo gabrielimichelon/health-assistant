@@ -1,13 +1,14 @@
-Entradas:
-- Bruschetta clássica com tomate e manjericão
-- Carpaccio de carne com lascas de parmesão
+Problema: cicatrização
+Descrição: Cicatrização pode ser favorecida por ingredientes naturais que estimulam regeneração, reduzem inflamação e ajudam no processo de recuperação.
 
-Massas:
-- Spaghetti à Carbonara
-- Fettuccine Alfredo
-- Lasanha à bolonhesa
+Problema: inflamações
+Descrição: Inflamações podem ser reduzidas com alimentos anti-inflamatórios, como gengibre, açafrão, alho e ervas naturais.
 
-Sobremesas:
-- Tiramisu
-- Panna Cotta com calda de frutas vermelhas
-- Gelato artesanal
+Problema: distúrbios digestivos
+Descrição: Distúrbios digestivos podem ser aliviados com chás, ervas calmantes e alimentos que reduzem desconfortos gastrointestinais.
+
+Problema: fadiga
+Descrição: A fadiga pode ser reduzida com alimentos energéticos, hidratantes e antioxidantes que ajudam a restaurar vitalidade.
+
+Problema: dor de cabeça / enxaqueca
+Descrição: Alguns ingredientes naturais ajudam a aliviar dores de cabeça e enxaquecas, como hortelã, gengibre e chás relaxantes.

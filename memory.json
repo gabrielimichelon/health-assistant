@@ -1,0 +1,107 @@
+[
+  {
+    "date": "2025-12-01 16:52",
+    "symptoms": [
+      "dor de barriga"
+    ],
+    "text": "Estou com dor de barriga."
+  },
+  {
+    "date": "2025-12-01 16:54",
+    "symptoms": [
+      "dor de barriga"
+    ],
+    "text": "Estou com dor de barriga."
+  },
+  {
+    "date": "2025-12-01 16:56",
+    "symptoms": [
+      "dor de cabeça"
+    ],
+    "text": "Estou com dor de cabeça."
+  },
+  {
+    "date": "2025-12-01 17:58",
+    "symptoms": [
+      "dor de barriga"
+    ],
+    "text": "Estou com dor de barriga."
+  },
+  {
+    "date": "2025-12-01 18:14",
+    "symptoms": [
+      "ansioso"
+    ],
+    "text": "Estou me sentindo ansioso."
+  },
+  {
+    "date": "2025-12-01 18:19",
+    "symptoms": [
+      "ansioso"
+    ],
+    "text": "Estou me sentindo ansioso."
+  },
+  {
+    "date": "2025-12-12 21:48",
+    "symptoms": [
+      "dor de cabeça"
+    ],
+    "text": "O que posso fazer para melhorar minha dor de cabeça?"
+  },
+  {
+    "date": "2025-12-15 21:29",
+    "symptoms": [
+      "dor de barriga"
+    ],
+    "text": "Estou com dor de barriga"
+  },
+  {
+    "date": "2025-12-16 00:07",
+    "symptoms": [
+      "depressão"
+    ],
+    "text": "depressão"
+  },
+  {
+    "date": "2025-12-16 00:09",
+    "symptoms": [
+      "depressão"
+    ],
+    "text": "depressao"
+  },
+  {
+    "date": "2025-12-16 00:22",
+    "symptoms": [
+      "depressão"
+    ],
+    "text": "depressao"
+  },
+  {
+    "date": "2025-12-16 00:35",
+    "symptoms": [
+      "dor de cabeça"
+    ],
+    "text": "dor de cabeça"
+  },
+  {
+    "date": "2025-12-16 22:33",
+    "symptoms": [
+      "depressão"
+    ],
+    "text": "Existe algo que eu possa fazer para melhorar a depressão?"
+  },
+  {
+    "date": "2025-12-16 23:23",
+    "symptoms": [
+      "indigestão"
+    ],
+    "text": "estou com indigestão"
+  },
+  {
+    "date": "2025-12-16 23:37",
+    "symptoms": [
+      "dores de cabeça"
+    ],
+    "text": "tenho tido muitas dores de caeça"
+  }
+]
