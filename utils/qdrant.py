@@ -3,8 +3,13 @@ import pandas as pd
 import google.generativeai as genai
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
+from langchain_core.documents import Document
+from langchain_qdrant import QdrantVectorStore
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from uuid import uuid4
 import time
 import os
+import json
 
 
 QDRANT_API_KEY=os.environ.get("QDRANT_API_KEY")
@@ -18,6 +23,15 @@ class HealthQDrant:
         self.qdrant_client = QdrantClient(
             url=qdrant_url, 
             api_key=qdrant_api_key,
+        )
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-mpnet-base-v2"
+        )
+
+        self.vector_store = QdrantVectorStore(
+            client=self.qdrant_client,
+            collection_name=QDRANT_COLLECTION_NAME,
+            embedding=self.embeddings,
         )
 
     def return_df_from_excel(file_path: str) -> pd.DataFrame:
@@ -127,6 +141,63 @@ class HealthQDrant:
             print("Ingestion complete!")
         except Exception as e:
             raise ValueError(f"Operation failed: {e}")
+
+
+    def insert_data_into_collection_md(self, df: pd.DataFrame, column_name: str, metadata_column: str, collection_name: str):
+        if column_name not in df.columns or metadata_column not in df.columns:
+            raise ValueError(f"Columns '{column_name}' or '{metadata_column}' not found in Excel file. Available columns: {list(df.columns)}")
+
+        if not GOOGLE_API_KEY:
+            raise ValueError("GOOGLE_API_KEY not found in environment variables.")
+        genai.configure(api_key=GOOGLE_API_KEY)
+        
+
+        health_collection = self.qdrant_client.get_collection(collection_name)
+        if health_collection.points_count > 0 :
+            print(f"Collection {collection_name} já foi preenchida.")
+            return
+
+        print("Starting processing...") 
+        total_rows = len(df)
+        batch_size = 30
+        documents = []
+
+        for index, row in df.iterrows():
+            text = str(row[column_name])
+            text_metadata = str(row[metadata_column])
+            metadata = {} if (not text_metadata or text_metadata.strip() == "" or text_metadata.lower() == "nan") else json.loads(text_metadata)
+            
+            # Skip empty rows
+            if not text or text.strip() == "" or text.lower() == "nan":
+                continue
+            
+            try:
+                documents.append(
+                    Document(
+                        page_content=text,
+                        metadata=metadata,
+                    )
+                )
+                # Rate limiting (adjust as needed for your tier)
+                time.sleep(0.05)
+                
+            except Exception as e:
+                print(f"Error processing row {index}: {e}")
+                continue
+
+            if len(documents) >= batch_size:
+                print(f"Upserting batch ({index + 1}/{total_rows})...")
+                uuids = [str(uuid4()) for _ in range(len(documents))]
+                self.vector_store.add_documents(documents=documents, ids=uuids)
+                
+                documents = []
+
+        # Upload final batch
+        if documents:
+            print(f"Inserting final batch...")
+            uuids = [str(uuid4()) for _ in range(len(documents))]
+            self.vector_store.add_documents(documents=documents, ids=uuids)
+
 
 
     def retrieve_qdrant_point(self, collection_name: str, point_id: int):

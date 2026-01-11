@@ -21,6 +21,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from qdrant_client import QdrantClient
+from langchain_qdrant import QdrantVectorStore
 
 
 # -----------------------------------------------------
@@ -150,13 +151,21 @@ def search_similar_documents(
     
     client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
     
-    vectorstore = Qdrant(
+    # vectorstore = Qdrant(
+    #     client=client,
+    #     collection_name=QDRANT_COLLECTION_NAME,
+    #     embeddings=embedding_model
+    # )
+
+    # results = vectorstore.similarity_search(query, k=k)
+    
+    vector_store = QdrantVectorStore(
         client=client,
         collection_name=QDRANT_COLLECTION_NAME,
-        embeddings=embedding_model
+        embedding=embedding_model,
     )
     
-    results = vectorstore.similarity_search(query, k=k)
+    results= vector_store.similarity_search_with_relevance_scores(query=query, k=k)
     return results
 
 
@@ -172,7 +181,7 @@ def rag_pipeline(question):
     # context = "\n\n".join([doc.page_content for doc in docs])
 
     qdocs = search_similar_documents(query=question, embedding_model=embeddings)
-    context = "\n\n".join([doc.page_content for doc in qdocs])
+    context = "\n\n".join([doc[0].page_content for doc in qdocs])
 
     memory_text=str(st.session_state.chat_history[-4:]) # últimas 2 conversas
 
