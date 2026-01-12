@@ -39,6 +39,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 st.set_page_config(page_title="Assistente de Bem-Estar", page_icon="🌿")
 st.title("Health Assistant — Seu especialista em bem-estar natural")
 
+st.caption("É possível melhorar sua qualidade de vida com recursos naturais e hábitos saudáveis. Estou aqui para te ajudar nesse processo contribuindo para uma vida mais saudável!  ")
 
 # -----------------------------------------------------
 # MEMÓRIA PERSISTENTE
@@ -98,15 +99,6 @@ def add_memory_entry(user_message):
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-mpnet-base-v2"
 )
-# vectorstore = Qdrant.from_documents(
-#     docs,
-#     embeddings,
-#     api_key=QDRANT_API_KEY,
-#     url=QDRANT_URL,
-#     collection_name=QDRANT_COLLECTION_NAME,
-# )
-
-# retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
@@ -150,15 +142,7 @@ def search_similar_documents(
     """
     
     client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
-    
-    # vectorstore = Qdrant(
-    #     client=client,
-    #     collection_name=QDRANT_COLLECTION_NAME,
-    #     embeddings=embedding_model
-    # )
 
-    # results = vectorstore.similarity_search(query, k=k)
-    
     vector_store = QdrantVectorStore(
         client=client,
         collection_name=QDRANT_COLLECTION_NAME,
@@ -170,20 +154,16 @@ def search_similar_documents(
 
 
 def rag_pipeline(question):
-    # memory = load_memory()
+    memory = load_memory()
 
-    # memory_text = "\n".join(
-    #     [f"- {m['date']}: {m['text']} (sintomas: {', '.join(m['symptoms'])})"
-    #      for m in memory]
-    # )
-
-    # docs = retriever.invoke(question)
-    # context = "\n\n".join([doc.page_content for doc in docs])
+    memory_text = "\n".join(
+        [f"- {m['date']}: {m['text']} (sintomas: {', '.join(m['symptoms'])})"
+         for m in memory[-2:]]
+    )
+    # memory_text=str(st.session_state.chat_history[-4:]) # últimas 2 conversas
 
     qdocs = search_similar_documents(query=question, embedding_model=embeddings)
     context = "\n\n".join([doc[0].page_content for doc in qdocs])
-
-    memory_text=str(st.session_state.chat_history[-4:]) # últimas 2 conversas
 
     chain_input = {
         "context": context,
@@ -199,18 +179,24 @@ def rag_pipeline(question):
 # INTERFACE (TEXTO + ÁUDIO)
 # -----------------------------------------------------
 
-st.divider()
-
-user_input = st.chat_input("Como posso ajudar hoje?")
-
-audio_bytes = audio_recorder(pause_threshold=2.0, sample_rate=41_000, text="",
-    recording_color="#e8352c",
-    neutral_color="#6aa36f",
-    icon_name="microphone",
-    icon_size="1x",)
+# st.divider()
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+
+# Create a placeholder
+placeholder = st.empty()
+ 
+with st.container():
+    audio_bytes = audio_recorder(pause_threshold=2.0, sample_rate=41_000, text="",
+        recording_color="#e8352c",
+        neutral_color="#6aa36f",
+        icon_name="microphone",
+        icon_size="1x",)
+
+    user_input = st.chat_input("Como posso ajudar hoje?") 
+
+
 
 
 # -----------------------------------------------------
@@ -218,9 +204,13 @@ if "chat_history" not in st.session_state:
 # -----------------------------------------------------
 
 if user_input:
-    add_memory_entry(user_input)
+    with placeholder.container(height=550):
+        if st.session_state.chat_history:
+            for speaker, msg in st.session_state.chat_history:
+                st.chat_message("user" if speaker.startswith("Você") else "assistant", avatar= "🤷" if speaker.startswith("Você") else "👩‍🌾").markdown(msg)
 
     with st.spinner("Analisando..."):
+        add_memory_entry(user_input)
         resposta = rag_pipeline(user_input)
 
     st.session_state.chat_history.append(("Você", user_input))
@@ -232,14 +222,18 @@ if user_input:
 # -----------------------------------------------------
 
 if audio_bytes:
-    st.success("Ouvindo...")
+    with placeholder.container(height=550):
+        if st.session_state.chat_history:
+            for speaker, msg in st.session_state.chat_history:
+                st.chat_message("user" if speaker.startswith("Você") else "assistant", avatar= "🤷" if speaker.startswith("Você") else "👩‍🌾").markdown(msg)
+    # st.success("Ouvindo...")
 
-    # salvar temporário
-    temp_audio = "temp_audio.wav"
-    with open(temp_audio, "wb") as f:
-        f.write(audio_bytes)
+    with st.spinner("Aguarde..."):
+        # salvar temporário
+        temp_audio = "temp_audio.wav"
+        with open(temp_audio, "wb") as f:
+            f.write(audio_bytes)
 
-    with st.spinner(""):
         with open(temp_audio, "rb") as f:
             transcription = client.audio.transcriptions.create(
                 model="whisper-1",
@@ -249,9 +243,8 @@ if audio_bytes:
     user_text = transcription.text
     st.write(f" **{user_text}**")
 
-    add_memory_entry(user_text)
-
     with st.spinner("Analisando..."):
+        add_memory_entry(user_text)
         resposta = rag_pipeline(user_text)
 
     st.session_state.chat_history.append(("Você (áudio)", user_text))
@@ -261,6 +254,10 @@ if audio_bytes:
 # -----------------------------------------------------
 # HISTÓRICO DO CHAT
 # -----------------------------------------------------
-
-for speaker, msg in st.session_state.chat_history:
-    st.chat_message("user" if speaker.startswith("Você") else "assistant").markdown(msg)
+with placeholder.container(height=550):
+    if st.session_state.chat_history:
+        for speaker, msg in st.session_state.chat_history:
+            st.chat_message("user" if speaker.startswith("Você") else "assistant", avatar= "🤷" if speaker.startswith("Você") else "👩‍🌾").markdown(msg)
+    else:
+        st.image("health-clipart.png", width=650)
+    

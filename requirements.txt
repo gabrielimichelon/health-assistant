@@ -6,7 +6,7 @@ langchain-core>=0.2.43
 langchain-text-splitters==0.3.0
 qdrant-client==1.12.1
 python-dotenv==1.0.1
-streamlit==1.39.0
+streamlit==1.52.0
 tiktoken==0.7.0
 numpy==1.26.4
 streamlit-webrtc==0.64.5
