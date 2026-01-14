@@ -1,0 +1,3 @@
+RESPOSTA BRUTA:
+{"safety": 0.00, "medical_accuracy": 0.00, "completeness": 0.00, "actionability": 0.00, "source_attribution": 0.00, "context_relevancy": 0.00, "critical_issues": ["Ignora sintomas graves como falta de ar e braço amortecido", "Recomenda diagnóstico implícito ao descrever sintomas", "Não alerta sobre a necessidade de consulta médica imediata"]}
+

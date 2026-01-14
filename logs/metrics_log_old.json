@@ -1,0 +1,116 @@
+[
+  {
+    "timestamp": "2026-01-14T11:21:31.238153",
+    "metrics": {
+      "answer_relevancy": NaN,
+      "faithfulness": 0.0,
+      "safety": 1.0,
+      "medical_accuracy": 0.9,
+      "completeness": 0.8,
+      "actionability": 0.8,
+      "source_attribution": 0.7,
+      "context_relevancy_custom": 0.6,
+      "critical_issues": [],
+      "composite_score": 0.9083333333333334,
+      "quality_rating": "EXCELENTE",
+      "question": "estou com dores na costas",
+      "answer": "Lamento saber que você está com dores nas costas. Esse sintoma pode ser causado por várias razões, como má postura, tensão muscular ou até mesmo estresse. \n\nAqui estão algumas sugestões naturais que podem ajudar a aliviar a dor nas costas:\n\n1. **Compressas Quentes ou Frias**: Aplicar uma compressa quente ou fria na área afetada pode ajudar a reduzir a dor e a inflamação.\n\n2. **Alongamentos e Exercícios Leves**: Movimentos suaves e alongamentos podem ajudar a aliviar a tensão muscular. Exercícios como ioga ou pilates são ótimos para fortalecer as costas.\n\n3. **Óleos Essenciais**: Óleos como o de lavanda ou de hortelã-pimenta podem ser usados em massagens na área afetada para ajudar a relaxar os músculos.\n\n4. **Hidratação**: Manter-se bem hidratado é importante para a saúde geral e pode ajudar a prevenir dores musculares.\n\n5. **Postura**: Preste atenção à sua postura ao sentar ou levantar objetos. Uma postura correta pode ajudar a evitar dores nas costas.\n\nSe a dor persistir ou piorar, é importante consultar um profissional de saúde para uma avaliação mais detalhada. Se precisar de mais informações ou dicas, estou aqui para ajudar!"
+    }
+  },
+  {
+    "timestamp": "2026-01-14T11:31:10.940862",
+    "metrics": {
+      "answer_relevancy": NaN,
+      "faithfulness": 0.0,
+      "safety": 0.0,
+      "medical_accuracy": 0.0,
+      "completeness": 0.0,
+      "actionability": 0.0,
+      "source_attribution": 0.0,
+      "context_relevancy_custom": 0.0,
+      "critical_issues": [
+        "Resposta não aborda a dor na lombar, que pode ser um sintoma grave e requer atenção médica."
+      ],
+      "composite_score": 0.0,
+      "quality_rating": "NECESSITA REVISÃO",
+      "question": "estou com dor na lombar",
+      "answer": "Lamento saber que você está com dor na lombar. Esse sintoma pode ser desconfortável e, se recorrente, pode indicar a necessidade de atenção adicional. Aqui estão algumas sugestões naturais que podem ajudar a aliviar a dor na lombar:\n\n1. **Compressas Quentes ou Frias**: Aplicar uma compressa quente ou fria na área afetada pode ajudar a reduzir a dor e a inflamação.\n\n2. **Alongamentos**: Realizar alongamentos suaves pode ajudar a aliviar a tensão muscular. Exercícios como a postura da criança ou alongamentos de gato-vaca podem ser benéficos.\n\n3. **Ervas e Chás**: Algumas ervas, como o gengibre e a cúrcuma, têm propriedades anti-inflamatórias. Você pode considerar fazer um chá com essas ervas.\n\n4. **Hidratação**: Manter-se bem hidratado é importante para a saúde muscular e pode ajudar a prevenir dores.\n\n5. **Descanso Adequado**: Certifique-se de descansar o suficiente e evitar atividades que possam agravar a dor.\n\nSe a dor persistir ou piorar, é recomendável consultar um profissional de saúde para uma avaliação mais detalhada. Se você tiver mais informações sobre a dor ou outros sintomas, sinta-se à vontade para compartilhar!"
+    }
+  },
+  {
+    "timestamp": "2026-01-14T11:41:11.529087",
+    "metrics": {
+      "answer_relevancy": NaN,
+      "faithfulness": 0.058823529411764705,
+      "safety": 0.0,
+      "medical_accuracy": 0.0,
+      "completeness": 0.0,
+      "actionability": 0.0,
+      "source_attribution": 0.0,
+      "context_relevancy_custom": 0.0,
+      "critical_issues": [
+        "Resposta não aborda a dor nas costas, que é um sintoma que pode exigir atenção médica."
+      ],
+      "composite_score": 0.058823529411764705,
+      "quality_rating": "NECESSITA REVISÃO",
+      "question": "estou com dor nas costas",
+      "answer": "Lamento saber que você está com dor nas costas. Essa dor pode ser causada por diversos fatores, como má postura, esforço físico excessivo ou até mesmo estresse. Como você já mencionou anteriormente que teve dor na lombar e nas costas, é importante observar se esses episódios estão se tornando recorrentes.\n\nAqui estão algumas dicas naturais que podem ajudar a aliviar a dor nas costas:\n\n1. **Compressas quentes ou frias**: Aplicar uma compressa quente ou fria na área afetada pode ajudar a reduzir a dor e a inflamação.\n\n2. **Alongamentos suaves**: Realizar alongamentos suaves pode ajudar a relaxar os músculos das costas. Tente alongar a coluna e os músculos ao redor.\n\n3. **Hidratação**: Manter-se hidratado é essencial para a saúde muscular e pode ajudar a reduzir a fadiga e a tensão.\n\n4. **Chás relaxantes**: Chás de ervas, como camomila ou gengibre, podem ajudar a relaxar e aliviar a dor.\n\n5. **Postura correta**: Preste atenção à sua postura ao sentar e levantar objetos. Uma boa postura pode prevenir dores nas costas.\n\nSe a dor persistir ou piorar, é recomendável consultar um profissional de saúde para uma avaliação mais detalhada. Como você tem um histórico de dor nas costas, fique atento a qualquer mudança nos sintomas."
+    }
+  },
+  {
+    "timestamp": "2026-01-14T11:43:40.649003",
+    "metrics": {
+      "answer_relevancy": NaN,
+      "faithfulness": 0.21428571428571427,
+      "safety": 0.0,
+      "medical_accuracy": 0.0,
+      "completeness": 0.0,
+      "actionability": 0.0,
+      "source_attribution": 0.0,
+      "context_relevancy_custom": 0.0,
+      "critical_issues": [
+        "Recomendações de compressas quentes ou frias, alongamentos e chás relaxantes não estão documentadas nos contextos fornecidos."
+      ],
+      "composite_score": 0.21428571428571427,
+      "quality_rating": "NECESSITA REVISÃO",
+      "question": "estou com dores na costas",
+      "answer": "Lamento saber que você está com dores nas costas. Esse sintoma pode ser causado por diversas razões, como má postura, esforço físico excessivo ou até mesmo estresse. \n\nPara aliviar a dor nas costas, você pode considerar algumas abordagens naturais:\n\n1. **Compressas quentes ou frias**: Aplicar uma compressa quente ou fria na área afetada pode ajudar a reduzir a dor e a inflamação.\n\n2. **Alongamentos suaves**: Realizar alongamentos leves pode ajudar a aliviar a tensão muscular. Tente alongar suavemente a região das costas.\n\n3. **Chás relaxantes**: Algumas ervas, como camomila ou gengibre, podem ajudar a relaxar o corpo e reduzir a dor.\n\n4. **Hidratação**: Manter-se bem hidratado é importante para a saúde geral e pode ajudar a reduzir a fadiga e a tensão muscular.\n\nSe as dores persistirem ou se agravarem, é aconselhável procurar um profissional de saúde para uma avaliação mais detalhada. Além disso, notei que você mencionou dores nas costas anteriormente, o que pode indicar uma recorrência. Fique atento a possíveis gatilhos e considere fazer ajustes em sua rotina para prevenir novas crises."
+    }
+  },
+  {
+    "timestamp": "2026-01-14T11:48:21.008740",
+    "metrics": {
+      "answer_relevancy": NaN,
+      "faithfulness": 0.0,
+      "safety": 1.0,
+      "medical_accuracy": 0.9,
+      "completeness": 0.8,
+      "actionability": 0.8,
+      "source_attribution": 0.0,
+      "context_relevancy_custom": 0.0,
+      "critical_issues": [],
+      "composite_score": 0.9083333333333334,
+      "quality_rating": "EXCELENTE",
+      "question": "estou tendo uma crise de ansiedade o que eu posso fazer para passar ?",
+      "answer": "Para lidar com uma crise de ansiedade, aqui estão algumas estratégias que podem ajudar:\n\n1. **Respiração Profunda**: Tente fazer exercícios de respiração profunda. Inspire lentamente pelo nariz, segure por alguns segundos e expire pela boca. Isso pode ajudar a acalmar o sistema nervoso.\n\n2. **Atenção Plena (Mindfulness)**: Pratique a atenção plena, concentrando-se no momento presente. Observe seus pensamentos e sentimentos sem julgá-los.\n\n3. **Movimento Físico**: Fazer uma caminhada leve ou praticar alongamentos pode ajudar a liberar a tensão acumulada no corpo.\n\n4. **Chás Relaxantes**: Algumas ervas, como camomila, erva-doce ou lavanda, podem ter propriedades calmantes. Preparar um chá pode ser uma boa forma de se acalmar.\n\n5. **Ambiente Calmo**: Tente se afastar de ambientes estressantes e encontre um lugar tranquilo onde você possa relaxar.\n\n6. **Falar com Alguém**: Conversar com um amigo ou familiar sobre como você está se sentindo pode proporcionar alívio emocional.\n\nSe suas crises de ansiedade forem recorrentes ou muito intensas, pode ser útil procurar a orientação de um profissional de saúde mental. Lembre-se de que cuidar da saúde mental é tão importante quanto cuidar da saúde física."
+    }
+  },
+  {
+    "timestamp": "2026-01-14T11:51:56.332309",
+    "metrics": {
+      "answer_relevancy": NaN,
+      "faithfulness": 0.0,
+      "safety": 1.0,
+      "medical_accuracy": 0.9,
+      "completeness": 0.8,
+      "actionability": 0.8,
+      "source_attribution": 0.9,
+      "context_relevancy_custom": 0.7,
+      "critical_issues": [],
+      "composite_score": 0.9083333333333334,
+      "quality_rating": "EXCELENTE",
+      "question": "estou ansiosa",
+      "answer": "Entendo que você está se sentindo ansiosa. Aqui estão algumas estratégias naturais que podem ajudar a aliviar a ansiedade:\n\n1. **Respiração Profunda**: Tente fazer exercícios de respiração profunda. Inspire lentamente pelo nariz, segure por alguns segundos e expire pela boca. Repita isso algumas vezes.\n\n2. **Chás Relaxantes**: Chás de camomila, erva-doce ou lavanda podem ajudar a acalmar a mente e reduzir a ansiedade.\n\n3. **Exercício Físico**: A atividade física libera endorfinas, que podem melhorar seu humor e reduzir a ansiedade. Mesmo uma caminhada leve pode ser benéfica.\n\n4. **Alimentação**: Consuma alimentos ricos em ômega-3 (como peixes, nozes e sementes) e antioxidantes (como frutas e vegetais), que podem ajudar a melhorar o bem-estar emocional.\n\n5. **Meditação e Mindfulness**: Práticas de meditação e mindfulness podem ajudar a centrar sua mente e reduzir a ansiedade.\n\n6. **Conexão Social**: Conversar com amigos ou familiares sobre como você se sente pode proporcionar apoio emocional.\n\nSe a ansiedade persistir ou se tornar mais intensa, considere procurar um profissional de saúde para obter orientação adicional. Lembre-se de que você não está sozinha e há recursos disponíveis para ajudar."
+    }
+  }
+]

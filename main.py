@@ -11,9 +11,9 @@ from audio_recorder_streamlit import audio_recorder
 # OpenAI (Whisper + Chat)
 from openai import OpenAI
 
-# LangChain + Qdrant
+# LangChain + Qdrant - IMPORTS CORRIGIDOS
 from typing import List, Optional
-from langchain.schema import Document
+from langchain_core.documents import Document  # MUDANÇA AQUI
 from langchain_openai import ChatOpenAI
 from langchain_community.vectorstores import Qdrant
 from langchain_community.document_loaders import TextLoader
@@ -23,6 +23,8 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from qdrant_client import QdrantClient
 from langchain_qdrant import QdrantVectorStore
 
+# Importar o avaliador
+from llm_evaluator import LLMEvaluator
 
 # -----------------------------------------------------
 # CONFIGURAÇÕES INICIAIS
@@ -35,6 +37,9 @@ QDRANT_COLLECTION_NAME=os.getenv("QDRANT_COLLECTION_NAME")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key=OPENAI_API_KEY)
+
+# Inicializar avaliador
+evaluator = LLMEvaluator()
 
 st.set_page_config(page_title="Assistente de Bem-Estar", page_icon="🌿")
 st.title("Health Assistant — Seu especialista em bem-estar natural")
@@ -90,21 +95,37 @@ def add_memory_entry(user_message):
 # RAG SETUP
 # -----------------------------------------------------
 
-# loader = TextLoader("instruct.txt")
-# documents = loader.load()
-
-# splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
-# docs = splitter.split_documents(documents)
-
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-mpnet-base-v2"
 )
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
+# prompt = ChatPromptTemplate.from_template(
+#     """
+# Você é um assistente especializado em bem-estar natural.
+
+# MEMÓRIA DO USUÁRIO (HISTÓRICO DE SINTOMAS):
+# {user_memory}
+
+# CONTEXTOS RECUPERADOS DO RAG:
+# {context}
+
+# INSTRUÇÕES:
+# - Utilize o histórico quando relevante.
+# - Utilize o contexto técnico do RAG quando necessário.
+# - Comente sobre recorrência de sintomas quando aplicável.
+# - Não invente informações.
+# - Se não houver dados suficientes, diga isso claramente.
+
+# Pergunta:
+# {question}
+#     """
+# )
+
 prompt = ChatPromptTemplate.from_template(
     """
-Você é um assistente especializado em bem-estar natural.
+Você é um assistente especializado em bem-estar natural e práticas integrativas de saúde.
 
 MEMÓRIA DO USUÁRIO (HISTÓRICO DE SINTOMAS):
 {user_memory}
@@ -119,9 +140,39 @@ INSTRUÇÕES:
 - Não invente informações.
 - Se não houver dados suficientes, diga isso claramente.
 
+INSTRUÇÕES DA RESPOSTA:
+
+1. ANÁLISE DE HISTÓRICO:
+   - Identifique padrões e recorrências de sintomas
+   - Mencione explicitamente quando houver sintomas repetidos
+   - Considere a frequência e duração dos sintomas relatados
+
+2. USO DO CONHECIMENTO TÉCNICO:
+   - Base suas recomendações EXCLUSIVAMENTE no contexto fornecido
+   - Cite as fontes quando mencionar informações técnicas
+   - Use linguagem acessível para explicar conceitos complexos
+
+3. SEGURANÇA E RESPONSABILIDADE:
+   - NUNCA substitua orientação médica profissional
+   - Recomende buscar um profissional de saúde para sintomas graves, persistentes ou preocupantes
+   - Deixe claro quando uma informação está além do seu escopo
+   - Não faça diagnósticos ou prescreva tratamentos
+
+4. QUALIDADE DA RESPOSTA:
+   - Seja específico e prático nas recomendações
+   - Organize a resposta em tópicos quando apropriado
+   - Inclua contraindicações e precauções relevantes
+   - Se não houver informações suficientes, admita claramente
+
+5. TOM E ESTILO:
+   - Seja empático e acolhedor
+   - Use linguagem clara e objetiva
+   - Evite jargões médicos sem explicação
+   - Demonstre cuidado genuíno com o bem-estar do usuário
+
 Pergunta:
 {question}
-    """
+"""
 )
 
 def search_similar_documents(
@@ -160,7 +211,6 @@ def rag_pipeline(question):
         [f"- {m['date']}: {m['text']} (sintomas: {', '.join(m['symptoms'])})"
          for m in memory[-2:]]
     )
-    # memory_text=str(st.session_state.chat_history[-4:]) # últimas 2 conversas
 
     qdocs = search_similar_documents(query=question, embedding_model=embeddings)
     context = "\n\n".join([doc[0].page_content for doc in qdocs])
@@ -170,19 +220,36 @@ def rag_pipeline(question):
         "question": question,
         "user_memory": memory_text if memory_text else "Sem histórico armazenado."
     }
+    
+    print("CHAIN INPUT:", chain_input)
 
     response = llm.invoke(prompt.format(**chain_input))
-    return response.content
+    
+    # AVALIAÇÃO COM RAGAS (sem ground_truth)
+    contexts_for_eval = [doc[0].page_content for doc in qdocs]
+    metrics = evaluator.evaluate_response(
+        question=question,
+        llm_answer=response.content,
+        contexts=contexts_for_eval
+    )
+    
+    # Salvar métricas
+    metrics["question"] = question
+    metrics["answer"] = response.content
+    evaluator.save_metrics(metrics)
+    
+    return response.content, metrics
 
 
 # -----------------------------------------------------
 # INTERFACE (TEXTO + ÁUDIO)
 # -----------------------------------------------------
 
-# st.divider()
-
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+
+if "show_metrics" not in st.session_state:
+    st.session_state.show_metrics = False
 
 # Create a placeholder
 placeholder = st.empty()
@@ -196,39 +263,100 @@ with st.container():
 
     user_input = st.chat_input("Como posso ajudar hoje?") 
 
-
-
+# Sidebar com métricas
+with st.sidebar:
+    st.header("📊 Métricas de Qualidade")
+    
+    # Obter últimas métricas do histórico
+    last_metrics = None
+    if st.session_state.chat_history:
+        for speaker, msg, metrics in reversed(st.session_state.chat_history):
+            if metrics:
+                last_metrics = metrics
+                break
+    
+    if last_metrics:
+        st.subheader("Última resposta:")
+        
+        # Score composto
+        composite = last_metrics.get("composite_score", 0)
+        quality = last_metrics.get("quality_rating", "N/A")
+        st.metric("📊 Score Geral", f"{composite:.2f}", quality)
+        
+        st.divider()
+        
+        # Métricas RAGAS
+        st.markdown("**🔍 Métricas RAGAS**")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("📝 Relevância", f"{last_metrics.get('answer_relevancy', 0):.2f}")
+        with col2:
+            st.metric("✅ Fidelidade", f"{last_metrics.get('faithfulness', 0):.2f}")
+        
+        st.divider()
+        
+        # Métricas de Saúde
+        st.markdown("**🏥 Métricas de Saúde**")
+        col3, col4 = st.columns(2)
+        with col3:
+            st.metric("🛡️ Segurança", f"{last_metrics.get('safety', 0):.2f}")
+            st.metric("📋 Completude", f"{last_metrics.get('completeness', 0):.2f}")
+            st.metric("📚 Fundamentação", f"{last_metrics.get('source_attribution', 0):.2f}")
+        with col4:
+            st.metric("🎯 Precisão", f"{last_metrics.get('medical_accuracy', 0):.2f}")
+            st.metric("⚡ Acionabilidade", f"{last_metrics.get('actionability', 0):.2f}")
+        
+        # Mostrar issues críticas se existirem
+        critical_issues = last_metrics.get('critical_issues', [])
+        if critical_issues:
+            st.warning("⚠️ **Problemas Críticos Detectados:**")
+            for issue in critical_issues:
+                st.write(f"- {issue}")
+        
+        st.divider()
+        
+        # Botão para gerar relatório
+        if st.button("📊 Gerar Relatório Completo"):
+            report = evaluator.generate_report()
+            if report:
+                st.json(report)
+                
+        # DEBUG: Mostrar todas as métricas disponíveis
+        with st.expander("🔍 Ver todas as métricas (DEBUG)"):
+            st.json(last_metrics)
+    else:
+        st.info("💬 Faça uma pergunta para ver as métricas de qualidade")
 
 # -----------------------------------------------------
 # ENTRADA POR TEXTO
 # -----------------------------------------------------
 
 if user_input:
+    # Adicionar mensagem do usuário imediatamente
+    st.session_state.chat_history.append(("Você", user_input, None))
+    
+    # Atualizar display
     with placeholder.container(height=550):
-        if st.session_state.chat_history:
-            for speaker, msg in st.session_state.chat_history:
-                st.chat_message("user" if speaker.startswith("Você") else "assistant", avatar= "🤷" if speaker.startswith("Você") else "👩‍🌾").markdown(msg)
+        for speaker, msg, metrics in st.session_state.chat_history:
+            st.chat_message("user" if speaker.startswith("Você") else "assistant", 
+                          avatar="🤷" if speaker.startswith("Você") else "👩‍🌾").markdown(msg)
 
     with st.spinner("Analisando..."):
         add_memory_entry(user_input)
-        resposta = rag_pipeline(user_input)
+        resposta, metrics = rag_pipeline(user_input)
 
-    st.session_state.chat_history.append(("Você", user_input))
-    st.session_state.chat_history.append(("Assistente", resposta))
-
+    # Adicionar resposta com métricas
+    st.session_state.chat_history.append(("Assistente", resposta, metrics))
+    
+    # Forçar rerun para atualizar sidebar
+    st.rerun()
 
 # -----------------------------------------------------
 # ENTRADA POR ÁUDIO
 # -----------------------------------------------------
 
 if audio_bytes:
-    with placeholder.container(height=550):
-        if st.session_state.chat_history:
-            for speaker, msg in st.session_state.chat_history:
-                st.chat_message("user" if speaker.startswith("Você") else "assistant", avatar= "🤷" if speaker.startswith("Você") else "👩‍🌾").markdown(msg)
-    # st.success("Ouvindo...")
-
-    with st.spinner("Aguarde..."):
+    with st.spinner("Transcrevendo áudio..."):
         # salvar temporário
         temp_audio = "temp_audio.wav"
         with open(temp_audio, "wb") as f:
@@ -241,14 +369,25 @@ if audio_bytes:
             )
 
     user_text = transcription.text
-    st.write(f" **{user_text}**")
+    
+    # Adicionar mensagem do usuário
+    st.session_state.chat_history.append(("Você (áudio)", user_text, None))
+    
+    # Atualizar display
+    with placeholder.container(height=550):
+        for speaker, msg, metrics in st.session_state.chat_history:
+            st.chat_message("user" if speaker.startswith("Você") else "assistant",
+                          avatar="🤷" if speaker.startswith("Você") else "👩‍🌾").markdown(msg)
 
     with st.spinner("Analisando..."):
         add_memory_entry(user_text)
-        resposta = rag_pipeline(user_text)
+        resposta, metrics = rag_pipeline(user_text)
 
-    st.session_state.chat_history.append(("Você (áudio)", user_text))
-    st.session_state.chat_history.append(("Assistente", resposta))
+    # Adicionar resposta com métricas
+    st.session_state.chat_history.append(("Assistente", resposta, metrics))
+    
+    # Forçar rerun para atualizar sidebar
+    st.rerun()
 
 
 # -----------------------------------------------------
@@ -256,8 +395,7 @@ if audio_bytes:
 # -----------------------------------------------------
 with placeholder.container(height=550):
     if st.session_state.chat_history:
-        for speaker, msg in st.session_state.chat_history:
+        for speaker, msg, metrics in st.session_state.chat_history:
             st.chat_message("user" if speaker.startswith("Você") else "assistant", avatar= "🤷" if speaker.startswith("Você") else "👩‍🌾").markdown(msg)
     else:
         st.image("health-clipart.png", width=650)
-    

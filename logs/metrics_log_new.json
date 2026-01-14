@@ -1,0 +1,56 @@
+[
+  {
+    "timestamp": "2026-01-14T12:04:06.712896",
+    "metrics": {
+      "answer_relevancy": NaN,
+      "faithfulness": 0.0,
+      "safety": 1.0,
+      "medical_accuracy": 0.9,
+      "completeness": 0.8,
+      "actionability": 0.9,
+      "source_attribution": 1.0,
+      "context_relevancy_custom": 0.9,
+      "critical_issues": [],
+      "composite_score": 0.9250000000000002,
+      "quality_rating": "EXCELENTE",
+      "question": " ⁠estou com dores na costas",
+      "answer": "Para aliviar as dores nas costas, aqui estão algumas sugestões que podem ajudar:\n\n1. **Descanso**: Evite atividades que possam agravar a dor, mas não fique completamente inativo. Um pouco de movimento leve pode ser benéfico.\n\n2. **Compressas quentes ou frias**: Aplique uma compressa quente ou fria na área afetada. O calor pode ajudar a relaxar os músculos, enquanto o frio pode reduzir a inflamação.\n\n3. **Exercícios de alongamento**: Exercícios suaves de alongamento podem ajudar a aliviar a tensão muscular. Tente alongar suavemente a região das costas e os músculos ao redor.\n\n4. **Postura**: Preste atenção à sua postura ao sentar e levantar objetos. Uma boa postura pode ajudar a prevenir e aliviar dores nas costas.\n\n5. **Massagem**: Uma massagem suave na área afetada pode ajudar a relaxar os músculos e aliviar a dor.\n\n6. **Atividade física regular**: Manter-se ativo com exercícios regulares pode ajudar a fortalecer os músculos das costas e prevenir futuras dores.\n\nSe as dores persistirem ou se agravarem, é importante consultar um profissional de saúde para uma avaliação mais detalhada. Além disso, considere que você mencionou anteriormente dores nas costas, o que pode indicar uma recorrência. Fique atento a qualquer mudança nos sintomas e busque ajuda se necessário."
+    }
+  },
+  {
+    "timestamp": "2026-01-14T12:07:35.476511",
+    "metrics": {
+      "answer_relevancy": NaN,
+      "faithfulness": NaN,
+      "safety": 1.0,
+      "medical_accuracy": 0.9,
+      "completeness": 0.8,
+      "actionability": 0.8,
+      "source_attribution": 1.0,
+      "context_relevancy_custom": 0.9,
+      "critical_issues": [],
+      "composite_score": 0.9083333333333334,
+      "quality_rating": "EXCELENTE",
+      "question": "⁠⁠estou com dor na lombar",
+      "answer": "Lamento saber que você está sentindo dor na lombar. A dor lombar pode ser causada por diversos fatores, como tensão muscular, má postura, ou até mesmo estresse. Aqui estão algumas sugestões que podem ajudar a aliviar a dor:\n\n1. **Descanso**: Tente evitar atividades que possam agravar a dor. No entanto, não fique completamente inativo por muito tempo, pois isso pode piorar a situação.\n\n2. **Compressas quentes ou frias**: Aplique uma compressa quente ou fria na área afetada. O calor pode ajudar a relaxar os músculos, enquanto o frio pode reduzir a inflamação.\n\n3. **Exercícios leves**: Se a dor permitir, exercícios leves de alongamento e fortalecimento podem ajudar a aliviar a tensão. Caminhadas curtas também podem ser benéficas.\n\n4. **Postura**: Preste atenção à sua postura, especialmente se você passa muito tempo sentado. Uma boa postura pode ajudar a aliviar a pressão na lombar.\n\n5. **Hidratação**: Manter-se hidratado é importante para a saúde geral e pode ajudar na recuperação.\n\nSe a dor persistir ou piorar, é importante consultar um profissional de saúde para uma avaliação mais detalhada. Além disso, se você tiver outros sintomas associados, como formigamento ou fraqueza nas pernas, procure atendimento médico imediatamente."
+    }
+  },
+  {
+    "timestamp": "2026-01-14T12:14:42.532389",
+    "metrics": {
+      "answer_relevancy": NaN,
+      "faithfulness": NaN,
+      "safety": 1.0,
+      "medical_accuracy": 0.9,
+      "completeness": 0.9,
+      "actionability": 0.8,
+      "source_attribution": 1.0,
+      "context_relevancy_custom": 1.0,
+      "critical_issues": [],
+      "composite_score": 0.9250000000000002,
+      "quality_rating": "EXCELENTE",
+      "question": "estou tendo uma crise de ansiedade o que eu posso fazer para passar ?",
+      "answer": "Para lidar com uma crise de ansiedade, existem várias estratégias que você pode experimentar. Aqui estão algumas sugestões que podem ajudar:\n\n1. **Respiração Profunda**: Pratique a respiração profunda. Inspire lentamente pelo nariz, segure a respiração por alguns segundos e depois expire lentamente pela boca. Isso pode ajudar a acalmar o sistema nervoso.\n\n2. **Alimentos Calmantes**: Considere incluir alimentos que ajudam a reduzir a ansiedade na sua dieta. Aqui estão algumas opções:\n   - **Maracujá**: Beber suco de maracujá pode ter um efeito sedativo natural.\n   - **Chá de Camomila**: Uma xícara de chá de camomila antes de dormir pode ajudar a induzir um sono mais profundo.\n   - **Alface**: Incorporar alface nas refeições pode ser benéfico, especialmente o talo, que tem propriedades calmantes.\n   - **Farelo de Aveia**: Adicionar farelo de aveia à sua dieta pode ajudar a promover a sensação de bem-estar.\n   - **Abacate**: Consumir abacate pode ajudar a regular o cortisol, o hormônio do estresse.\n\n3. **Exercício Físico**: A prática de atividades físicas, como uma caminhada leve, pode ajudar a liberar endorfinas e melhorar o humor.\n\n4. **Meditação e Mindfulness**: Praticar meditação ou técnicas de mindfulness pode ajudar a acalmar a mente e reduzir a ansiedade.\n\n5. **Converse com Alguém**: Às vezes, falar sobre o que está te preocupando pode aliviar a carga emocional.\n\n6. **Evite Estimulantes**: Reduza o consumo de cafeína e açúcar, pois eles podem aumentar a ansiedade.\n\nSe a crise de ansiedade persistir ou se tornar frequente, é importante considerar buscar a ajuda de um profissional de saúde mental. Eles podem oferecer suporte e estratégias adicionais para lidar com a ansiedade."
+    }
+  }
+]
