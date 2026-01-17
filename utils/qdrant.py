@@ -16,7 +16,7 @@ QDRANT_API_KEY=os.environ.get("QDRANT_API_KEY")
 QDRANT_URL=os.environ.get("QDRANT_URL")
 QDRANT_COLLECTION_NAME=os.environ.get("QDRANT_COLLECTION_NAME")
 
-GOOGLE_API_KEY=os.environ.get("GOOGLE_API_KEY")
+GOOGLE_API_KEY=os.environ.get("GOOGLE_API_KEY_TCC")
 
 class HealthQDrant:
     def __init__(self, qdrant_url: str, qdrant_api_key: str):
