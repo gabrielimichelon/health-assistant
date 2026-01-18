@@ -15,12 +15,11 @@ from openai import OpenAI
 from typing import List, Optional
 from langchain.schema import Document
 from langchain_openai import ChatOpenAI
-from langchain_community.vectorstores import Qdrant
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from qdrant_client import QdrantClient
+from qdrant_client import QdrantClient, models
 from langchain_qdrant import QdrantVectorStore
 
 
@@ -57,8 +56,15 @@ def save_memory(memory):
     with open(MEMORY_FILE, "w", encoding="utf-8") as f:
         json.dump(memory, f, indent=2, ensure_ascii=False)
 
-def add_memory_entry(user_message):
-    """Extrai sintomas e salva com a data."""
+def add_memory_entry(user_message) -> str:
+    """Extrai sintomas e salva com a data.
+
+    Args:
+        query: Texto de consulta
+    
+    Returns:
+        Str: Os sintomas extraídos do texto ou o texto de consulta se não for encontrado sintoma
+    """
     llm_extract = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
     extract_prompt = f"""
@@ -70,6 +76,7 @@ def add_memory_entry(user_message):
     ["sintoma1", "sintoma2", ...]
     """
 
+    main_content = user_message
     try:
         extracted = llm_extract.invoke(extract_prompt).content
         symptoms = json.loads(extracted)
@@ -84,6 +91,10 @@ def add_memory_entry(user_message):
             "text": user_message
         })
         save_memory(memory)
+        if isinstance(symptoms, list):
+            main_content = ", ".join([m for m in symptoms])
+    
+    return main_content
 
 
 # -----------------------------------------------------
@@ -114,10 +125,11 @@ CONTEXTOS RECUPERADOS DO RAG:
 
 INSTRUÇÕES:
 - Utilize o histórico quando relevante.
-- Utilize o contexto técnico do RAG quando necessário.
+- UTILIZE EXCLUSIVAMENTE OS CONTEXTOS RECUPERADOS DO RAG PARA CRIAR AS RESPOSTAS. 
 - Comente sobre recorrência de sintomas quando aplicável.
 - Não invente informações.
 - Se não houver dados suficientes, diga isso claramente.
+- Preciso de um texto com no máximo 1000 caracteres.
 
 Pergunta:
 {question}
@@ -127,7 +139,7 @@ Pergunta:
 def search_similar_documents(
     query: str,
     embedding_model: HuggingFaceEmbeddings,
-    k: int = 3
+    k: int = 5
 ) -> List[Document]:
     """
     Busca documentos similares no QDrant.
@@ -153,7 +165,7 @@ def search_similar_documents(
     return results
 
 
-def rag_pipeline(question):
+def rag_pipeline(question, main_content):
     memory = load_memory()
 
     memory_text = "\n".join(
@@ -162,7 +174,12 @@ def rag_pipeline(question):
     )
     # memory_text=str(st.session_state.chat_history[-4:]) # últimas 2 conversas
 
-    qdocs = search_similar_documents(query=question, embedding_model=embeddings)
+    # Se a pergunta do usuário não fornece um sintoma, utiliza o sintoma da última pergunta para auxiliar o RAG
+    if question == main_content and len(memory) > 0 and memory[-1]["text"] != question:
+        aux_conent = ", ".join([m for m in memory[-1]['symptoms']])
+        main_content = f"{aux_conent}, {question}"
+
+    qdocs = search_similar_documents(query=main_content, embedding_model=embeddings)
     context = "\n\n".join([doc[0].page_content for doc in qdocs])
 
     chain_input = {
@@ -197,8 +214,6 @@ with st.container():
     user_input = st.chat_input("Como posso ajudar hoje?") 
 
 
-
-
 # -----------------------------------------------------
 # ENTRADA POR TEXTO
 # -----------------------------------------------------
@@ -210,8 +225,8 @@ if user_input:
                 st.chat_message("user" if speaker.startswith("Você") else "assistant", avatar= "🤷" if speaker.startswith("Você") else "👩‍🌾").markdown(msg)
 
     with st.spinner("Analisando..."):
-        add_memory_entry(user_input)
-        resposta = rag_pipeline(user_input)
+        main_content = add_memory_entry(user_input)
+        resposta = rag_pipeline(user_input, main_content)
 
     st.session_state.chat_history.append(("Você", user_input))
     st.session_state.chat_history.append(("Assistente", resposta))
@@ -244,8 +259,8 @@ if audio_bytes:
     st.write(f" **{user_text}**")
 
     with st.spinner("Analisando..."):
-        add_memory_entry(user_text)
-        resposta = rag_pipeline(user_text)
+        main_content = add_memory_entry(user_text)
+        resposta = rag_pipeline(user_text, main_content)
 
     st.session_state.chat_history.append(("Você (áudio)", user_text))
     st.session_state.chat_history.append(("Assistente", resposta))
